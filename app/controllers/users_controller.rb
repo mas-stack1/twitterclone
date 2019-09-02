@@ -26,7 +26,18 @@ class UsersController < ApplicationController
       render :new
     end
   end
-
+  
+  def destroy
+    @user = User.find(params[:id])
+      if @user.destroy
+        flash[:success] = "ユーザを退会しました"
+        redirect_to root_url
+      else
+        flash.now[:danger] = "ユーザの退会に失敗しました"
+        render "tppages/index"
+      end
+  end
+  
   def followings
     @user = User.find(params[:id])
     @followings = @user.followings.page(params[:page])
