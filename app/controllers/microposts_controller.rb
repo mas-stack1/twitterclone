@@ -11,11 +11,29 @@ class MicropostsController < ApplicationController
       render "toppages/index"
     end
   end
+  
+  def edit
+    @micropost = Micropost.find(params[:id])
+  end
+  
+  def update
+    @micropost = Micropost.find(params[:id])
+   
+    if @micropost.update(content:params[:micropost])
+      flash[:success] = "メッセージの編集に成功しました"
+      redirect_to root_url
+    else
+      flash.now[:danger] = "メッセージの編集に失敗しました。"
+      render "toppages/index"
+    end
+  end
 
   def destroy
-    @micropost.destroy
-    flash[:success] = "メッセージを削除しまいｓた。"
+    @micropost = Micropost.find(params[:id])
+    if @micropost.destroy
+    flash[:success] = "メッセージを削除しました。"
     redirect_back(fallback_location: root_path)
+    end
   end
   
   private

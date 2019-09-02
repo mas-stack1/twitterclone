@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers]
+  before_action :require_user_logged_in, only: [:index, :show,:edit,:update, :followings, :followers]
 
   def index
     @users = User.order(id: :desc).page(params[:page]).per(25)
@@ -24,6 +24,22 @@ class UsersController < ApplicationController
     else
       flash.now[:danger] = 'ユーザの登録に失敗しました。'
       render :new
+    end
+  end
+  
+  def edit
+    @user = User.find_by(params[:id])
+  end
+  
+  def update
+    @user = User.find(params[:id])
+    @microposts = Micropost.find_by(id:@user.id)
+    if @user.update(name:params[:name],email:params[:email])
+      flash[:success] = "ユーザ情報を編集しました。"
+      redirect_to @user
+    else
+      flash[:danger] = "ユーザ情報の編集に失敗しました。"
+      render "toppages/index"
     end
   end
   
