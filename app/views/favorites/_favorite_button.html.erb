@@ -1,0 +1,16 @@
+
+
+<% if current_user.favoriting?(micropost) %>
+    <%# お気に入り解除 %>
+    <%= form_with(model: current_user.favorites.find_by(micropost_id: micropost.id), local: true, method: :delete) do |f| %>
+        <%= hidden_field_tag :micropost_id, micropost.id %>
+        <%= f.submit 'Unfavorite', class: 'btn btn-danger btn-block' %>
+    <% end %>
+<% else %>
+    <%# 新規のお気に入り %>
+    <%= form_with(model: current_user.favorites.build, local: true) do |f| %>
+        <%= hidden_field_tag :micropost_id, micropost.id %>
+        <%= f.submit 'Favorite', class: 'btn btn-primary btn-block' %>
+    <% end %>
+<% end %>
+
